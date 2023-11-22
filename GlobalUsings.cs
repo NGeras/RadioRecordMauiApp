@@ -1,0 +1,14 @@
+﻿global using CommunityToolkit.Maui;
+global using RadioRecord.Models;
+global using RadioRecord.Services;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using RadioRecord.ViewModels;
+global using RadioRecord.Views;
+global using System.Collections.ObjectModel;
+global using System.ComponentModel;
+global using System.Diagnostics;
+global using System.Globalization;
+global using System.Runtime.CompilerServices;
+global using System.Text.Json;
+global using System.Threading.Tasks;
