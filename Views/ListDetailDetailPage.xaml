@@ -1,13 +1,105 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:vm="clr-namespace:RadioRecord.ViewModels"
-			 x:Class="RadioRecord.Views.ListDetailDetailPage"
-			 x:DataType="vm:ListDetailDetailViewModel">
-	<ScrollView>
-		<VerticalStackLayout Margin="12">
-			<Label Text="{Binding Item.Title}" FontSize="Header" />
-			<Label Text="{Binding Item.Description}" FontSize="Default" />
-		</VerticalStackLayout>
-	</ScrollView>
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:RadioRecord.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:models="using:RadioRecord.Models"
+             x:Class="RadioRecord.Views.ListDetailDetailPage"
+             x:DataType="vm:ListDetailDetailViewModel">
+    <ContentPage.Resources>
+        <toolkit:IsListNotNullOrEmptyConverter x:Key="IsListNotNullOrEmptyConverter" />
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout Margin="12">
+            <Label Text="{Binding Item.title}"
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+                   FontSize="40" FontAttributes="Bold" />
+            <Image Source="{Binding Item.bg_image}"
+                   Aspect="AspectFill"
+                   Margin="0,0,0,10" />
+            <Label Text="{Binding Item.tooltip}" FontSize="Default" />
+            <Label Text="{Binding Source={x:Reference mediaElement}, Path=CurrentState}" FontSize="Default" />
+            <Label Text="Genres:"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{DynamicResource PrimaryColor}"
+                   Margin="0,0,0,10" />
+            <CollectionView ItemsSource="{Binding Item.genre}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Genre">
+                        <StackLayout>
+                            <Label Text="{Binding name}" Margin="5" />
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Label Text="10 Recent songs"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{DynamicResource PrimaryColor}"
+                   IsVisible="{Binding HistoryItems, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+                   Margin="0,0,0,10" />
+            <CollectionView
+                x:Name="HistoryList"
+                IsVisible="{Binding HistoryItems, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
+                ItemsSource="{Binding HistoryItems}"
+                Margin="0,0,0,20">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:History">
+                        <Frame
+                            BackgroundColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray600}}"
+                            CornerRadius="14"
+                            Margin="0,0,0,0">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ListDetailDetailViewModel}}, Path=OpenUriCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Grid.RowSpan="2"
+                                       WidthRequest="60"
+                                       HeightRequest="60"
+                                       Source="{Binding image100}" Margin="5" />
+
+                                <StackLayout Grid.Column="1">
+                                    <Label Text="{Binding song}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="{DynamicResource PrimaryColor}" />
+                                    <Label Text="{Binding artist}"
+                                           FontSize="14"
+                                           TextColor="{DynamicResource SecondaryColor}"
+                                           Margin="0,0,0,5" />
+                                    <Label Text="{Binding time, Converter={StaticResource UnixTimestampConverter}}"
+                                           FontSize="12"
+                                           TextColor="{DynamicResource SecondaryColor}" />
+                                </StackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <toolkit:MediaElement
+                x:Name="mediaElement"
+                ShouldAutoPlay="True"
+                ShouldShowPlaybackControls="False" ShouldKeepScreenOn="False"
+                Source="{Binding Item.stream_hls}" />
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

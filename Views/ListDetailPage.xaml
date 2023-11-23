@@ -1,22 +1,95 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-			 xmlns:vm="clr-namespace:RadioRecord.ViewModels"
-			 xmlns:m="clr-namespace:RadioRecord.Models"
-			 x:Class="RadioRecord.Views.ListDetailPage"
-			 x:DataType="vm:ListDetailViewModel">
-	<RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshingCommand}">
-		<CollectionView ItemsSource="{Binding Items}" RemainingItemsThreshold="10" RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
-			<CollectionView.ItemTemplate>
-				<DataTemplate x:DataType="m:SampleItem">
-					<Frame Margin="4" Padding="12">
-						<Frame.GestureRecognizers>
-							<TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ListDetailViewModel}}, Path=GoToDetailsCommand}" CommandParameter="{Binding .}" />
-						</Frame.GestureRecognizers>
-						<Label Text="{Binding Title}" FontSize="Large" TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Black}}" />
-					</Frame>
-				</DataTemplate>
-			</CollectionView.ItemTemplate>
-		</CollectionView>
-	</RefreshView>
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:RadioRecord.ViewModels"
+             xmlns:m="clr-namespace:RadioRecord.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="RadioRecord.Views.ListDetailPage"
+             x:DataType="vm:ListDetailViewModel">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:IsNotNullConverter x:Key="IsNotNull" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="6*" />
+        </Grid.RowDefinitions>
+        <!-- Now Playing Item -->
+        <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Secondary}}"
+               ToolTipProperties.Text="{Binding DetailViewModel.Item.tooltip}" CornerRadius="14" Margin="10"
+               IsVisible="{Binding DetailViewModel.Item, Converter={StaticResource IsNotNull}}">
+            <!-- Content for Now Playing Item -->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Image Grid.RowSpan="2"
+                       WidthRequest="60"
+                       HeightRequest="60" Source="{Binding DetailViewModel.Item.icon_fill_white}" />
+                <Label Grid.Column="1" Text="{Binding DetailViewModel.Item.title}" FontSize="Large"
+                       FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
+                <Label Grid.Row="1"
+                       TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"
+                       Grid.Column="1"
+                       Text="Now playing"
+                       FontAttributes="Italic"
+                       VerticalOptions="End" />
+            </Grid>
+        </Frame>
+        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshingCommand}">
+            <CollectionView ItemsSource="{Binding Items}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"
+                                     Span="2" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="m:Station">
+                        <ContentView>
+                            <Frame
+                                BackgroundColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray600}}"
+                                ToolTipProperties.Text="{Binding tooltip}" CornerRadius="14" Margin="10">
+                                <Frame.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ListDetailViewModel}}, Path=GoToDetailsCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Frame.GestureRecognizers>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Image Grid.RowSpan="2"
+                                           WidthRequest="60"
+                                           HeightRequest="60"
+                                           Source="{Binding icon_gray}" />
+                                    <Label Grid.Column="1" Text="{Binding title}" FontSize="Large"
+                                           FontAttributes="Bold"
+                                           TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}" />
+                                    <Label Grid.Row="1"
+                                           TextColor="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource White}}"
+                                           Grid.Column="1"
+                                           Text="{Binding tooltip}"
+                                           FontAttributes="Italic"
+                                           VerticalOptions="End" />
+                                </Grid>
+                            </Frame>
+                        </ContentView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
 </ContentPage>

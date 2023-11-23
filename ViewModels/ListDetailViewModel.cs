@@ -2,59 +2,55 @@
 
 public partial class ListDetailViewModel : BaseViewModel
 {
-
-	[ObservableProperty]
-	bool isRefreshing;
-
-	[ObservableProperty]
-	ObservableCollection<SampleItem> items;
-
     private readonly SampleDataService dataService;
 
-    public ListDetailViewModel(SampleDataService service)
-	{
-		dataService = service;
-	}
+    [ObservableProperty] private ListDetailDetailViewModel _detailViewModel;
 
-	[RelayCommand]
-	private async Task OnRefreshing()
-	{
-		IsRefreshing = true;
+    [ObservableProperty] private bool isRefreshing;
 
-		try
-		{
-			await LoadDataAsync();
-		}
-		finally
-		{
-			IsRefreshing = false;
-		}
-	}
+    [ObservableProperty] private ObservableCollection<Station> items;
 
-	[RelayCommand]
-	public async Task LoadMore()
-	{
-		await dataService.GetItems();
-
-		foreach (var item in items)
-		{
-			Items.Add(item);
-		}
-	}
-
-	public async Task LoadDataAsync()
+    public ListDetailViewModel(SampleDataService service, ListDetailDetailViewModel detailViewModel)
     {
-        await dataService.GetItems();
-
-        // Items = new ObservableCollection<SampleItem>(await dataService.GetItems());
+        dataService = service;
+        _detailViewModel = detailViewModel;
     }
 
     [RelayCommand]
-	private async Task GoToDetails(SampleItem item)
-	{
-		await Shell.Current.GoToAsync(nameof(ListDetailDetailPage), true, new Dictionary<string, object>
-		{
-			{ "Item", item }
-		});
-	}
+    private async Task OnRefreshing()
+    {
+        IsRefreshing = true;
+
+        try
+        {
+            await LoadDataAsync();
+        }
+        finally
+        {
+            IsRefreshing = false;
+        }
+    }
+
+    [RelayCommand]
+    public async Task LoadMore()
+    {
+        var roots = await dataService.GetStations();
+
+        foreach (var item in items) Items.Add(item);
+    }
+
+    public async Task LoadDataAsync()
+    {
+        var roots = await dataService.GetStations();
+        Items = new ObservableCollection<Station>(roots.result.stations);
+    }
+
+    [RelayCommand]
+    private async Task GoToDetails(Station item)
+    {
+        await Shell.Current.GoToAsync(nameof(ListDetailDetailPage), true, new Dictionary<string, object>
+        {
+            { "Item", item }
+        });
+    }
 }

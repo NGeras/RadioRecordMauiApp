@@ -17,16 +17,14 @@ public static class MauiProgram
         builder.Services.AddTransient<HttpClient>();
 
         builder.Services.AddTransient<SampleDataService>();
-		builder.Services.AddTransient<ListDetailDetailViewModel>();
-		builder.Services.AddTransient<ListDetailDetailPage>();
+
+        builder.Services.AddSingleton<ListDetailDetailViewModel>();
+		builder.Services.AddSingleton<ListDetailDetailPage>();
 
 		builder.Services.AddSingleton<ListDetailViewModel>();
 
 		builder.Services.AddSingleton<ListDetailPage>();
 
-		builder.Services.AddSingleton<MediaElementViewModel>();
-
-		builder.Services.AddSingleton<MediaElementPage>();
 
 		builder.Services.AddSingleton<LocalizationViewModel>();
 

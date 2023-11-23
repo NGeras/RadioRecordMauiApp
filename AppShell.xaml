@@ -8,16 +8,12 @@
 
 	<TabBar>
 		<ShellContent
-			Title="ListDetail"
+			Title="Stations"
 			Icon="iconlistdetail.png"
 			ContentTemplate="{DataTemplate views:ListDetailPage}" />
-		<ShellContent
-			Title="MediaElement"
-			Icon="iconmediaelement.png"
-			ContentTemplate="{DataTemplate views:MediaElementPage}" />
-		<ShellContent
-			Title="Localization"
-			Icon="iconlocalization.png"
-			ContentTemplate="{DataTemplate views:LocalizationPage}" />
+		<!-- <ShellContent -->
+		<!-- 	Title="Localization" -->
+		<!-- 	Icon="iconlocalization.png" -->
+		<!-- 	ContentTemplate="{DataTemplate views:LocalizationPage}" /> -->
 	</TabBar>
 </Shell>
