@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:RadioRecord.ViewModels"
              xmlns:m="clr-namespace:RadioRecord.Models"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:markupExtensions="clr-namespace:RadioRecord.MarkupExtensions"
              x:Class="RadioRecord.Views.ListDetailPage"
              x:DataType="vm:ListDetailViewModel">
     <ContentPage.Resources>
@@ -15,12 +16,24 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="6*" />
         </Grid.RowDefinitions>
+        <SearchBar x:Name="searchBar"
+                   SearchCommand="{Binding PerformSearchCommand}"
+                   SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
+            <SearchBar.Behaviors>
+                <toolkit:EventToCommandBehavior
+                    Command="{Binding TextChangedCommand}"
+                    EventArgsConverter="{markupExtensions:TextChangedEventArgsConverter}"
+                    EventName="TextChanged" />
+            </SearchBar.Behaviors>
+        </SearchBar>
         <!-- Now Playing Item -->
-        <Frame BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Secondary}}"
-               ToolTipProperties.Text="{Binding DetailViewModel.Item.tooltip}" CornerRadius="14" Margin="10"
-               IsVisible="{Binding DetailViewModel.Item, Converter={StaticResource IsNotNull}}">
+        <Frame Grid.Row="1"
+               BackgroundColor="{AppThemeBinding Light={StaticResource Secondary}, Dark={StaticResource Secondary}}"
+               ToolTipProperties.Text="{Binding NowPlaying.Item.tooltip}" CornerRadius="14" Margin="10"
+               IsVisible="{Binding NowPlaying.Item, Converter={StaticResource IsNotNull}}">
             <!-- Content for Now Playing Item -->
             <Grid>
                 <Grid.RowDefinitions>
@@ -30,11 +43,12 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <Image Grid.RowSpan="2"
                        WidthRequest="60"
-                       HeightRequest="60" Source="{Binding DetailViewModel.Item.icon_fill_white}" />
-                <Label Grid.Column="1" Text="{Binding DetailViewModel.Item.title}" FontSize="Large"
+                       HeightRequest="60" Source="{Binding NowPlaying.Item.icon_fill_white}" />
+                <Label Grid.Column="1" Text="{Binding NowPlaying.Item.title}" FontSize="Large"
                        FontAttributes="Bold"
                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
                 <Label Grid.Row="1"
@@ -43,14 +57,33 @@
                        Text="Now playing"
                        FontAttributes="Italic"
                        VerticalOptions="End" />
+                <Button Grid.RowSpan="2" Grid.Column="2" Text="Stop" Command="{Binding StopPlayingCommand}" />
             </Grid>
         </Frame>
-        <RefreshView Grid.Row="1" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshingCommand}">
-            <CollectionView ItemsSource="{Binding Items}">
+        <RefreshView Grid.Row="2" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshingCommand}">
+            <CollectionView ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
-                                     Span="2" />
+                                     Span="{Binding Span}" />
                 </CollectionView.ItemsLayout>
+                <CollectionView.EmptyView>
+                    <ContentView>
+                        <StackLayout HorizontalOptions="CenterAndExpand"
+                                     VerticalOptions="CenterAndExpand">
+                            <Label Text="No results matched your filter."
+                                   Margin="10,25,10,10"
+                                   FontAttributes="Bold"
+                                   FontSize="18"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" />
+                            <Label Text="Try a broader filter?"
+                                   FontAttributes="Italic"
+                                   FontSize="12"
+                                   HorizontalOptions="Fill"
+                                   HorizontalTextAlignment="Center" />
+                        </StackLayout>
+                    </ContentView>
+                </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="m:Station">
                         <ContentView>

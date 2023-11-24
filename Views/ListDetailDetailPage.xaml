@@ -7,47 +7,60 @@
              xmlns:models="using:RadioRecord.Models"
              x:Class="RadioRecord.Views.ListDetailDetailPage"
              x:DataType="vm:ListDetailDetailViewModel">
-    <ContentPage.Resources>
-        <toolkit:IsListNotNullOrEmptyConverter x:Key="IsListNotNullOrEmptyConverter" />
-    </ContentPage.Resources>
-    <ScrollView>
-        <VerticalStackLayout Margin="12">
-            <Label Text="{Binding Item.title}"
-                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
-                   FontSize="40" FontAttributes="Bold" />
-            <Image Source="{Binding Item.bg_image}"
-                   Aspect="AspectFill"
-                   Margin="0,0,0,10" />
-            <Label Text="{Binding Item.tooltip}" FontSize="Default" />
-            <Label Text="{Binding Source={x:Reference mediaElement}, Path=CurrentState}" FontSize="Default" />
-            <Label Text="Genres:"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="{DynamicResource PrimaryColor}"
-                   Margin="0,0,0,10" />
-            <CollectionView ItemsSource="{Binding Item.genre}">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Horizontal" />
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:Genre">
-                        <StackLayout>
-                            <Label Text="{Binding name}" Margin="5" />
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-            <Label Text="10 Recent songs"
-                   FontSize="18"
-                   FontAttributes="Bold"
-                   TextColor="{DynamicResource PrimaryColor}"
-                   IsVisible="{Binding HistoryItems, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
-                   Margin="0,0,0,10" />
-            <CollectionView
-                x:Name="HistoryList"
-                IsVisible="{Binding HistoryItems, Converter={StaticResource IsListNotNullOrEmptyConverter}}"
-                ItemsSource="{Binding HistoryItems}"
-                Margin="0,0,0,20">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="7*" />
+        </Grid.RowDefinitions>
+        <Image Source="{Binding Item.bg_image}"
+               Aspect="AspectFill"
+               Margin="0,0,0,10" Opacity="0.5" />
+        <Label Text="{Binding Item.title}"
+               TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
+               FontSize="50" FontAttributes="Bold" Margin="10" />
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                <Label Text="{Binding Item.tooltip}" FontSize="Default" />
+                <Label Text="Genres:"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource PrimaryColor}"
+                       Margin="0,0,0,10" />
+            </VerticalStackLayout>
+            <Button Grid.Column="1" CornerRadius="100" WidthRequest="70" HeightRequest="70" Text="Play"
+                    Clicked="PlayButton_OnClicked" />
+            <VerticalStackLayout Grid.Row="1" Margin="12" Grid.ColumnSpan="2">
+                <CollectionView ItemsSource="{Binding Item.genre}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Genre">
+                            <StackLayout>
+                                <Label Text="{Binding name}" Margin="5" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <toolkit:MediaElement
+                    x:Name="mediaElement"
+                    ShouldAutoPlay="False" IsVisible="False"
+                    ShouldShowPlaybackControls="False" ShouldKeepScreenOn="False" />
+            </VerticalStackLayout>
+        </Grid>
+        <Grid Grid.Row="2">
+            <CollectionView x:Name="HistoryList"
+                            ItemsSource="{Binding HistoryItems}"
+                            Margin="0,0,0,20" Header="10 Recent songs" EmptyView="No items to display">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
                 </CollectionView.ItemsLayout>
@@ -95,11 +108,6 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            <toolkit:MediaElement
-                x:Name="mediaElement"
-                ShouldAutoPlay="True"
-                ShouldShowPlaybackControls="False" ShouldKeepScreenOn="False"
-                Source="{Binding Item.stream_hls}" />
-        </VerticalStackLayout>
-    </ScrollView>
+        </Grid>
+    </Grid>
 </ContentPage>

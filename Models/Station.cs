@@ -1,4 +1,6 @@
-﻿namespace RadioRecord.Models;
+﻿using Newtonsoft.Json;
+
+namespace RadioRecord.Models;
 
 public class Station
 {

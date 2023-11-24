@@ -11,9 +11,9 @@
 			Title="Stations"
 			Icon="iconlistdetail.png"
 			ContentTemplate="{DataTemplate views:ListDetailPage}" />
-		<!-- <ShellContent -->
-		<!-- 	Title="Localization" -->
-		<!-- 	Icon="iconlocalization.png" -->
-		<!-- 	ContentTemplate="{DataTemplate views:LocalizationPage}" /> -->
+		<ShellContent
+			Title="Live"
+			Icon="iconlocalization.png"
+			ContentTemplate="{DataTemplate views:LiveStreamingView}" />
 	</TabBar>
 </Shell>
