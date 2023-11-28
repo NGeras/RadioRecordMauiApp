@@ -17,10 +17,11 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="6*" />
         </Grid.RowDefinitions>
         <SearchBar x:Name="searchBar"
-                   SearchCommand="{Binding PerformSearchCommand}"
+                   SearchCommand="{Binding PerformSearchCommand}" Placeholder="Search stations"
                    SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}">
             <SearchBar.Behaviors>
                 <toolkit:EventToCommandBehavior
@@ -60,11 +61,44 @@
                 <Button Grid.RowSpan="2" Grid.Column="2" Text="Stop" Command="{Binding StopPlayingCommand}" />
             </Grid>
         </Frame>
-        <RefreshView Grid.Row="2" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshingCommand}">
+        <!-- <Frame Grid.Row="2" CornerRadius="8" Background="Gray" Margin="10"> -->
+        <!--     <toolkit:Expander > -->
+        <!--         <toolkit:Expander.Header> -->
+        <!--             <Label Text="Genres" -->
+        <!--                    FontAttributes="Bold" -->
+        <!--                    FontSize="Medium" /> -->
+        <!--         </toolkit:Expander.Header> -->
+        <!--         <FlexLayout -->
+        <!--             RadioButtonGroup.GroupName="GenresGroup" Wrap="Wrap" -->
+        <!--             RadioButtonGroup.SelectedValue="{Binding SelectedGenre}" -->
+        <!--             BindableLayout.ItemsSource="{Binding Genres}"> -->
+        <!-- -->
+        <!--             ~1~ <VerticalStackLayout.Resources> @1@ -->
+        <!--             ~1~     <Style TargetType="RadioButton"> @1@ -->
+        <!--             ~1~         <Setter Property="ControlTemplate"  @1@ -->
+        <!--             ~1~                 Value="{StaticResource RadioButtonControlTemplate}"/> @1@ -->
+        <!--             ~1~     </Style> @1@ -->
+        <!--             ~1~ </VerticalStackLayout.Resources> @1@ -->
+        <!--             <BindableLayout.ItemTemplate> -->
+        <!--                 <DataTemplate x:DataType="m:Genre"> -->
+        <!--                     <RadioButton Content="{Binding name}" TextTransform="Lowercase" Value="{Binding name}"> -->
+        <!--                         ~1~ <RadioButton.GestureRecognizers> @1@ -->
+        <!--                         ~1~     <TapGestureRecognizer  @1@ -->
+        <!--                         ~1~         Tapped="RadioButton_Tapped"  @1@ -->
+        <!--                         ~1~         CommandParameter="{Binding .}" /> @1@ -->
+        <!--                         ~1~ </RadioButton.GestureRecognizers> @1@ -->
+        <!--                     </RadioButton> -->
+        <!--                 </DataTemplate> -->
+        <!--             </BindableLayout.ItemTemplate> -->
+        <!--         </FlexLayout> -->
+        <!--     </toolkit:Expander> -->
+        <!-- </Frame> -->
+
+        <RefreshView Grid.Row="3" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshingCommand}">
             <CollectionView ItemsSource="{Binding Items}" VerticalOptions="FillAndExpand">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
-                                     Span="{Binding Span}" />
+                                     Span="{Binding Span}"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.EmptyView>
                     <ContentView>

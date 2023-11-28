@@ -30,4 +30,6 @@ public class Station
     public string shareUrl { get; set; }
     public object mark { get; set; }
     public string updated { get; set; }
+    [JsonIgnore] public bool isFavorite{ get; set; }
+
 }

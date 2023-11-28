@@ -2,17 +2,17 @@ namespace RadioRecord.Views;
 
 public partial class LiveStreamingView : ContentPage
 {
-    private readonly SampleDataService _dataService;
+    private readonly LiveStreamingViewModel ViewModel;
 
-    public LiveStreamingView(SampleDataService dataService)
+    public LiveStreamingView(LiveStreamingViewModel viewModel)
     {
-        _dataService = dataService;
         InitializeComponent();
+        BindingContext = ViewModel = viewModel;
     }
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        var a = await _dataService.GetNowPlaying();
+        await ViewModel.LoadDataAsync();
     }
 }

@@ -7,8 +7,10 @@ public partial class ListDetailViewModel : BaseViewModel
     [ObservableProperty] private bool isRefreshing;
 
     [ObservableProperty] private ObservableCollection<Station> items;
+    [ObservableProperty] private ObservableCollection<Genre> genres;
     [ObservableProperty] private NowPlayingViewModel nowPlaying;
     [ObservableProperty] private int span;
+    [ObservableProperty] private string selectedGenre;
 
     public ListDetailViewModel(SampleDataService service, NowPlayingViewModel nowPlayingViewModel)
     {
@@ -81,10 +83,18 @@ public partial class ListDetailViewModel : BaseViewModel
         Items = new ObservableCollection<Station>(sortedList);
     }
 
+    [RelayCommand]
+    private void AddToFavorites(Station station)
+    {
+        // Favorites.AddToFavorites(station);
+        // Any other logic or UI updates after adding to favorites
+    }
+
     public async Task LoadDataAsync()
     {
         var roots = await dataService.GetStations();
         Items = new ObservableCollection<Station>(roots.result.stations);
+        Genres = new ObservableCollection<Genre>(roots.result.genre);
     }
 
     [RelayCommand]

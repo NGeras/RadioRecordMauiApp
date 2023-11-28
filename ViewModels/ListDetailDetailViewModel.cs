@@ -3,9 +3,6 @@
 [QueryProperty(nameof(Item), "Item")]
 public partial class ListDetailDetailViewModel : BaseViewModel
 {
-    private const string defaultTrackImageUrl =
-        "https://www.radiorecord.ru/local/templates/record/assets/build/images/DefaultTrack_600.png";
-
     private readonly SampleDataService _dataService;
     private CancellationTokenSource _tokenSource;
 
@@ -25,18 +22,13 @@ public partial class ListDetailDetailViewModel : BaseViewModel
     {
         try
         {
-            var historyRoot = await _dataService.GetHistory(Item.id, _tokenSource.Token);
-            var histories = historyRoot.result.history;
+            var histories = await _dataService.GetHistory(Item.id, _tokenSource.Token);
             if (histories.Count < 1)
             {
                 HistoryItems = new ObservableCollection<History>();
                 return;
             }
-
             var resultHistory = histories.Where(x => !string.IsNullOrWhiteSpace(x.song)).Take(10);
-            foreach (var history in resultHistory)
-                if (string.IsNullOrWhiteSpace(history.listenUrl))
-                    history.image100 = defaultTrackImageUrl;
             HistoryItems = new ObservableCollection<History>(resultHistory);
         }
         catch (Exception e)

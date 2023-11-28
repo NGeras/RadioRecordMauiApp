@@ -18,6 +18,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<SampleDataService>();
 
+		builder.Services.AddSingleton<FavoritesViewModel>();
+		builder.Services.AddSingleton<LiveStreamingViewModel>();
 		builder.Services.AddSingleton<NowPlayingViewModel>();
 		builder.Services.AddSingleton<ListDetailDetailPage>();
         builder.Services.AddSingleton<ListDetailDetailViewModel>();

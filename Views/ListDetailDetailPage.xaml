@@ -9,16 +9,16 @@
              x:DataType="vm:ListDetailDetailViewModel">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="3*" />
             <RowDefinition Height="2*" />
             <RowDefinition Height="7*" />
         </Grid.RowDefinitions>
         <Image Source="{Binding Item.bg_image}"
                Aspect="AspectFill"
-               Margin="0,0,0,10" Opacity="0.5" />
+               Opacity="0.5" />
         <Label Text="{Binding Item.title}"
                TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource White}}"
-               FontSize="50" FontAttributes="Bold" Margin="10" />
+               FontSize="45" FontAttributes="Bold" Margin="10,0,0,0" />
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="4*" />
