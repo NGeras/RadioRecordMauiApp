@@ -58,7 +58,7 @@ public partial class ListDetailViewModel : BaseViewModel
     {
         var roots = await dataService.GetStations();
 
-        foreach (var item in items) Items.Add(item);
+        foreach (var item in Items) Items.Add(item);
     }
 
     [RelayCommand]
@@ -68,19 +68,21 @@ public partial class ListDetailViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task TextChanged(string newText)
+    private Task TextChanged(string newText)
     {
         if (string.IsNullOrEmpty(newText)) Items = new ObservableCollection<Station>(dataService.Stations);
+        return Task.CompletedTask;
     }
 
     [RelayCommand]
-    public async Task PerformSearch(string query)
+    public Task PerformSearch(string query)
     {
         var sortedList = dataService.Stations
             .Where(station => station.title.IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0 ||
                               station.genre.Any(g =>
                                   g.name.ToString().IndexOf(query, StringComparison.OrdinalIgnoreCase) >= 0)).ToList();
         Items = new ObservableCollection<Station>(sortedList);
+        return Task.CompletedTask;
     }
 
     [RelayCommand]

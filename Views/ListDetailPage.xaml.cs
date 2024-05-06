@@ -9,6 +9,6 @@ public partial class ListDetailPage : ContentPage
         InitializeComponent();
 
         BindingContext = ViewModel = viewModel;
-        ViewModel.LoadDataAsync();
+        Task.Run(() => ViewModel.LoadDataAsync());
     }
 }
