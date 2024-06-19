@@ -36,21 +36,21 @@
                ToolTipProperties.Text="{Binding NowPlaying.Item.tooltip}" CornerRadius="14" Margin="10"
                IsVisible="{Binding NowPlaying.Item, Converter={StaticResource IsNotNull}}">
             <!-- Content for Now Playing Item -->
-            <Grid>
+            <Grid x:Name="NowPlayingGrid">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Image Grid.RowSpan="2"
                        WidthRequest="60"
                        HeightRequest="60" Source="{Binding NowPlaying.Item.icon_fill_white}" />
                 <Label Grid.Column="1" Text="{Binding NowPlaying.Item.title}" FontSize="Large"
-                       FontAttributes="Bold"
+                       FontAttributes="Bold" LineBreakMode="CharacterWrap"
                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}" />
                 <Label Grid.Row="1"
                        TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource Primary}}"

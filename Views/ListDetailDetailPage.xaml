@@ -51,10 +51,6 @@
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-                <toolkit:MediaElement
-                    x:Name="mediaElement"
-                    ShouldAutoPlay="False" IsVisible="False"
-                    ShouldShowPlaybackControls="False" ShouldKeepScreenOn="False" />
             </VerticalStackLayout>
         </Grid>
         <Grid Grid.Row="2">

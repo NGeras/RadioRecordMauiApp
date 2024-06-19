@@ -6,20 +6,14 @@ namespace RadioRecord.Views;
 public partial class ListDetailDetailPage : ContentPage
 {
     private readonly ListDetailDetailViewModel ViewModel;
+    private readonly MediaService _mediaService;
 
-    public ListDetailDetailPage(ListDetailDetailViewModel viewModel)
+    public ListDetailDetailPage(ListDetailDetailViewModel viewModel, MediaService mediaService)
     {
         InitializeComponent();
         BindingContext = ViewModel = viewModel;
-        mediaElement.StateChanged += MediaElementOnStateChanged;
-        ViewModel.NowPlaying.PropertyChanged += NowPlayingOnPropertyChanged;
-    }
-
-    private void NowPlayingOnPropertyChanged(object sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName is nameof(ViewModel.NowPlaying.Item))
-            if (ViewModel.NowPlaying.Item == null)
-                mediaElement.Stop();
+        _mediaService = mediaService;
+        _mediaService.StateChanged += MediaElementOnStateChanged;
     }
 
     private void MediaElementOnStateChanged(object sender, MediaStateChangedEventArgs e)
@@ -41,7 +35,10 @@ public partial class ListDetailDetailPage : ContentPage
 
     private void PlayButton_OnClicked(object sender, EventArgs e)
     {
-        mediaElement.Source = MediaSource.FromUri(ViewModel.Item.stream_hls);
-        mediaElement.Play();
+        //mediaElement.Source = MediaSource.FromUri(ViewModel.Item.stream_hls);
+        //mediaElement.MetadataTitle = ViewModel.Item.title;
+        //mediaElement.MetadataArtist = "RadioRecord";
+        //mediaElement.MetadataArtworkUrl = "http://www.myownpersonaldomain.com/image.jpg";
+        _mediaService.Play(ViewModel.Item);
     }
 }

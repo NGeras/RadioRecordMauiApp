@@ -3,6 +3,7 @@
 public partial class ListDetailViewModel : BaseViewModel
 {
     private readonly SampleDataService dataService;
+    private readonly MediaService _mediaService;
 
     [ObservableProperty] private bool isRefreshing;
 
@@ -12,8 +13,9 @@ public partial class ListDetailViewModel : BaseViewModel
     [ObservableProperty] private int span;
     [ObservableProperty] private string selectedGenre;
 
-    public ListDetailViewModel(SampleDataService service, NowPlayingViewModel nowPlayingViewModel)
+    public ListDetailViewModel(SampleDataService service, NowPlayingViewModel nowPlayingViewModel, MediaService mediaService)
     {
+        _mediaService = mediaService;
         dataService = service;
         nowPlaying = nowPlayingViewModel;
         if (DeviceInfo.Idiom == DeviceIdiom.Desktop || DeviceInfo.Idiom == DeviceIdiom.Tablet ||
@@ -64,14 +66,19 @@ public partial class ListDetailViewModel : BaseViewModel
     [RelayCommand]
     public void StopPlaying()
     {
+        _mediaService.Stop();
         NowPlaying.Item = null;
     }
 
     [RelayCommand]
     private Task TextChanged(string newText)
     {
-        if (string.IsNullOrEmpty(newText)) Items = new ObservableCollection<Station>(dataService.Stations);
-        return Task.CompletedTask;
+        if (string.IsNullOrEmpty(newText))
+        {
+            Items = new ObservableCollection<Station>(dataService.Stations);
+            return Task.CompletedTask;
+        }
+        return PerformSearch(newText);
     }
 
     [RelayCommand]
